@@ -16,7 +16,7 @@ const useCartStore = create<CartState>()(
                         items: existingProduct
                             ? state.items
                             : [
-                                ...get().items,
+                                ...state.items,
                                 {
                                     quantity: 1,
                                     id: product.id,
@@ -60,35 +60,36 @@ const useCartStore = create<CartState>()(
                 toast.success("Item removed")
             },
             updateQuantity: (type: 'increment' | 'decrement', id: number) => {
-                const state = get()
-                const item = state.items.find((item) => item.id === id)
+                const { items, removeFromCart } = get()
+                const item = items.find((item) => item.id === id)
 
                 if (!item) return
 
                 // 1. Handle removal
                 if (type === 'decrement' && item.quantity === 1) {
-                    state.removeFromCart(id)
+                    removeFromCart(id)
                     return
                 }
 
                 // 2. Handle stock limit
-
-                if (type === 'increment' && item.quantity >= (item.amount ?? 0)) {
+                if (type === 'increment' && item.amount !== undefined && item.quantity >= item.amount) {
                     toast.error("Max stock reached")
                     return
                 }
 
                 // 3. Update state immutably
-                set({
-                    items: state.items.map((i) =>
+                set((currentState) => ({
+                    items: currentState.items.map((i) =>
                         i.id === id ? { ...i, quantity: type === 'increment' ? i.quantity + 1 : i.quantity - 1 } : i
                     )
-                })
+                }))
 
             },
+
+        },
         }),
-        {
-            name: 'cart-storage', // Name of the item in storage (must be unique). 
+{
+    name: 'cart-storage', // Name of the item in storage (must be unique). 
             // Uses localStorage by default
         }
     )
