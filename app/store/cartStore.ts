@@ -14,7 +14,7 @@ const useCartStore = create<CartState>()(
                     existingProduct = state.items.find((item) => item.id === product.id)
                     return {
                         items: existingProduct
-                            ? get().items
+                            ? state.items
                             : [
                                 ...get().items,
                                 {
@@ -59,24 +59,32 @@ const useCartStore = create<CartState>()(
                 })
                 toast.success("Item removed")
             },
-            updateQuantity: (type: string, id: number) => {
-                const item = get().items.find((item) => item.id === id)
-                if (!item) {
+            updateQuantity: (type: 'increment' | 'decrement', id: number) => {
+                const state = get()
+                const item = state.items.find((item) => item.id === id)
+
+                if (!item) return
+
+                // 1. Handle removal
+                if (type === 'decrement' && item.quantity === 1) {
+                    state.removeFromCart(id)
                     return
                 }
-                if (item.quantity === 1 && type === "decrement") {
-                    get().removeFromCart(id)
-                } 
-                if (item.quantity >= item.amount! && type === "increment") {
-                    toast.error("Item not in stock")
+
+                // 2. Handle stock limit
+
+                if (type === 'increment' && item.quantity >= (item.amount ?? 0)) {
+                    toast.error("Max stock reached")
+                    return
                 }
-                else {
-                    item.quantity =
-                        type === "decrement" ? item.quantity - 1 : item.quantity + 1
-                    set({
-                        items: [...get().items],
-                    })
-                }
+
+                // 3. Update state immutably
+                set({
+                    items: state.items.map((i) =>
+                        i.id === id ? { ...i, quantity: type === 'increment' ? i.quantity + 1 : i.quantity - 1 } : i
+                    )
+                })
+
             },
         }),
         {

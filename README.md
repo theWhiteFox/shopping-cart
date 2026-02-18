@@ -25,7 +25,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Learn More
 
-[blog post](https://www.thewhitefoxde.com/blog/next-shopping-cart-zustand)
+[blog post](https://www.thewhitefoxde.comgit /blog/next-shopping-cart-zustand)
 
 To learn more about Next.js, take a look at the following resources:
 
