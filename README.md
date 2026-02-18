@@ -3,7 +3,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-[theWhiteFox blog Next Shopping cart Zustand](https://www.thewhitefoxdev.blog/blog/next-shopping-cart-zustand)
+[theWhiteFoxDev Next Shopping cart Zustand](https://www.thewhitefoxdev.com/blog/next-shopping-cart-zustand)
 
 First, run the development server:
 
@@ -25,7 +25,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Learn More
 
-[blog post](https://www.thewhitefoxdev.blog/blog/next-shopping-cart-zustand)
+[blog post](https://www.thewhitefoxde.com/blog/next-shopping-cart-zustand)
 
 To learn more about Next.js, take a look at the following resources:
 
