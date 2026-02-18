@@ -61,6 +61,7 @@ const useCartStore = create<CartState>()(
             },
             updateQuantity: (type: 'increment' | 'decrement', id: number) => {
                 const { items, removeFromCart } = get()
+
                 const item = items.find((item) => item.id === id)
 
                 if (!item) return
@@ -72,25 +73,23 @@ const useCartStore = create<CartState>()(
                 }
 
                 // 2. Handle stock limit
+
                 if (type === 'increment' && item.amount !== undefined && item.quantity >= item.amount) {
                     toast.error("Max stock reached")
                     return
                 }
 
                 // 3. Update state immutably
-                set((currentState) => ({
-                    items: currentState.items.map((i) =>
+                set({
+                    items: items.map((i) =>
                         i.id === id ? { ...i, quantity: type === 'increment' ? i.quantity + 1 : i.quantity - 1 } : i
                     )
-                }))
+                })
 
             },
-
-        },
         }),
-{
-    name: 'cart-storage', // Name of the item in storage (must be unique). 
-            // Uses localStorage by default
+        {
+            name: 'cart-storage', // Uses localStorage by default
         }
     )
 )
